@@ -3,7 +3,7 @@ async function sendMessage() {
   const input = document.getElementById('messageInput');
   const message = input.value.trim(); // 입력값의 앞뒤 공백 제거
   if (!message) return; // 메시지가 비어있으면 함수 종료
-  appendMessage(`You: ${message}`); // 사용자 메시지를 채팅창에 추가
+  appendMessage(`You: ${message}`, 'user'); // 사용자 메시지를 채팅창에 추가
   input.value = ''; // 입력 필드 초기화
 
   try {
@@ -18,13 +18,13 @@ async function sendMessage() {
     });
     if (response.ok) {
       const data = await response.json(); // 응답을 JSON으로 파싱
-      appendMessage(`수학 선생님: ${formatResponse(data.response)}`); // 응답을 채팅창에 추가
+      appendMessage(`고양이 선생님: ${formatResponse(data.response)}`, 'bot'); // 응답을 채팅창에 추가
     } else {
-      appendMessage('수학 선생님: 에러가 발생했습니다.'); // 오류 메시지 표시
+      appendMessage('고양이 선생님: 에러가 발생했습니다.', 'bot'); // 오류 메시지 표시
     }
   } catch (error) {
     console.error('Error:', error); // 콘솔에 오류 로깅
-    appendMessage('수학 선생님: 에러가 발생했습니다.'); // 오류 메시지 표시
+    appendMessage('고양이 선생님: 에러가 발생했습니다.', 'bot'); // 오류 메시지 표시
   }
 }
 
@@ -38,9 +38,10 @@ function formatResponse(response) {
 }
 
 // 메시지를 채팅창에 추가하는 함수
-function appendMessage(message) {
+function appendMessage(message, sender) {
   const chatbox = document.getElementById('chatbox');
   const messageElement = document.createElement('div');
+  messageElement.classList.add('message', sender); // 메시지에 클래스를 추가합니다.
   messageElement.innerHTML = message; // innerHTML을 사용하여 HTML 태그를 렌더링합니다.
   chatbox.appendChild(messageElement);
   chatbox.scrollTop = chatbox.scrollHeight;
@@ -62,5 +63,3 @@ document.addEventListener('DOMContentLoaded', () => {
   // 전송 버튼 클릭 이벤트 리스너
   sendButton.addEventListener('click', sendMessage);
 });
-
-//테스트

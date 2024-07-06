@@ -8,7 +8,7 @@ async function sendMessage() {
 
   try {
     // 서버에 POST 요청 보내기
-    const response = await fetch('http://localhost:3000/solve-equation', {
+    const response = await fetch('https://port-0-test-back-lxlts66g89582f3b.sel5.cloudtype.app/solve-equation', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -62,3 +62,5 @@ document.addEventListener('DOMContentLoaded', () => {
   // 전송 버튼 클릭 이벤트 리스너
   sendButton.addEventListener('click', sendMessage);
 });
+
+//테스트

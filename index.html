@@ -1,17 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>고양이 수학 선생님</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 리뷰 생성기</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-  <h1>고양이 수학 선생님</h1>
-  <div id="chatbox"></div>
-  <input type="text" id="messageInput" placeholder="수학 문제를 질문해주세요">
-  <button id="sendButton">Send</button>
-
-  <script src="app.js"></script>
+    <div class="container">
+        <h1>제품 리뷰 생성기</h1>
+        <div class="chat-container">
+            <div id="chat-messages"></div>
+            <div class="input-area">
+                <input type="text" id="product-name" placeholder="제품명" required>
+                <input type="text" id="product-description" placeholder="간단 설명" required>
+                <input type="number" id="product-price" placeholder="가격 (원)" required>
+                <button id="send-button">전송</button>
+                <button id="copy-button">결과 복사</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

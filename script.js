@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchReview(name, description, price) {
         try {
-            const response = await fetch('http://localhost:3000/search-product', {
+            const response = await fetch('https://port-0-math2-back-lxlts66g89582f3b.sel5.cloudtype.app/search-product', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

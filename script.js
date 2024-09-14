@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 로딩 인디케이터 표시
             loadingIndicator.style.display = 'block';
             try {
-                const response = await fetch('https://web-math-front-backup-lxlts66g89582f3b.sel5.cloudtype.app/search-product', {
+                const response = await fetch('https://port-0-math2-back-lxlts66g89582f3b.sel5.cloudtype.app/search-product', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

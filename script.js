@@ -24,10 +24,19 @@ function initializeApp() {
         return;
     }
 
-    elements.generateButton.addEventListener('click', () => generateReview().catch(console.error));
+    const trackAndGenerateReview = (trigger) => {
+        gtag('event', 'generate_review', {
+            'event_category': 'engagement',
+            'event_label': trigger,
+            'product_name': elements.productName.value
+        });
+        generateReview().catch(console.error);
+    };
+
+    elements.generateButton.addEventListener('click', () => trackAndGenerateReview('button_click'));
     elements.productName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            generateReview().catch(console.error);
+            trackAndGenerateReview('enter_key');
         }
     });
     elements.retryButton.addEventListener('click', handleRetryClick);
@@ -35,6 +44,10 @@ function initializeApp() {
 }
 
 function handleRetryClick() {
+    gtag('event', 'retry_review', {
+        'event_category': 'engagement',
+        'event_label': 'retry_button'
+    });
     elements.inputContainer.style.display = 'block';
     elements.resultContainer.style.display = 'none';
     elements.resultContent.innerHTML = '';
@@ -43,13 +56,29 @@ function handleRetryClick() {
 function handleCopyClick() {
     if (generatedReview) {
         navigator.clipboard.writeText(generatedReview)
-            .then(() => alert('복사되었습니다!'))
-            .catch(err => console.error('복사 실패:', err));
+            .then(() => {
+                gtag('event', 'copy_review', {
+                    'event_category': 'engagement',
+                    'event_label': 'success'
+                });
+                alert('복사되었습니다!');
+            })
+            .catch(err => {
+                gtag('event', 'copy_review', {
+                    'event_category': 'error',
+                    'event_label': 'clipboard_error'
+                });
+                console.error('복사 실패:', err);
+            });
     }
 }
 
 async function generateReview() {
     if (!elements?.productName?.value) {
+        gtag('event', 'generate_error', {
+            'event_category': 'error',
+            'event_label': 'empty_input'
+        });
         alert('제품명을 입력해주세요.');
         return;
     }
@@ -72,11 +101,24 @@ async function generateReview() {
 
         const data = await response.json();
         generatedReview = data.response;
-        displayReview(generatedReview);
+        
+        // 리뷰 생성 성공 이벤트
+        gtag('event', 'generate_success', {
+            'event_category': 'success',
+            'event_label': 'review_generated',
+            'product_name': name
+        });
 
+        displayReview(generatedReview);
         elements.productName.value = '';
         elements.inputContainer.style.display = 'none';
     } catch (error) {
+        // 에러 발생 이벤트
+        gtag('event', 'generate_error', {
+            'event_category': 'error',
+            'event_label': error.message,
+            'product_name': name
+        });
         console.error('Error:', error);
         alert('죄송합니다. 리뷰를 생성하는 중 오류가 발생했습니다.');
     } finally {

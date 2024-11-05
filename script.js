@@ -1,30 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productName = document.getElementById('product-name');
-    const productDescription = document.getElementById('product-description');
-    const productPrice = document.getElementById('product-price');
     const generateButton = document.getElementById('generate-button');
-
     const inputContainer = document.getElementById('input-container');
     const resultContainer = document.getElementById('result-container');
     const resultContent = document.getElementById('result-content');
     const retryButton = document.getElementById('retry-button');
     const copyButton = document.getElementById('copy-button');
-    const loadingIndicator = document.getElementById('loading-indicator'); // 로딩 인디케이터 요소
+    const loadingIndicator = document.getElementById('loading-indicator');
 
     let generatedReview = '';
 
     generateButton.addEventListener('click', generateReview);
 
-    [productName, productDescription, productPrice].forEach(input => {
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                generateReview();
-            }
-        });
+    productName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            generateReview();
+        }
     });
 
     retryButton.addEventListener('click', () => {
-        // 리뷰 다시 작성하기 버튼 클릭 시 동작
         resultContainer.style.display = 'none';
         resultContent.innerHTML = '';
         generatedReview = '';
@@ -32,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     copyButton.addEventListener('click', () => {
-        // 리뷰 복사 버튼 클릭 시 동작
         if (generatedReview) {
             navigator.clipboard.writeText(generatedReview)
                 .then(() => alert('복사되었습니다!'))
@@ -42,11 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function generateReview() {
         const name = productName.value.trim();
-        const description = productDescription.value.trim();
-        const price = productPrice.value.trim();
 
-        if (name && description && price) {
-            // 로딩 인디케이터 표시
+        if (name) {
             loadingIndicator.style.display = 'block';
             try {
                 const response = await fetch('https://port-0-math2-back-lxlts66g89582f3b.sel5.cloudtype.app/search-product', {
@@ -55,9 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 
-                        product_name: name,
-                        product_description: description,
-                        product_price: price
+                        product_name: name
                     }),
                 });
 
@@ -69,20 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 generatedReview = data.response;
                 displayReview(generatedReview);
 
-                // 입력 필드 초기화 및 입력 컨테이너 숨기기
                 productName.value = '';
-                productDescription.value = '';
-                productPrice.value = '';
                 inputContainer.style.display = 'none';
             } catch (error) {
                 console.error('Error:', error);
                 alert('죄송합니다. 리뷰를 생성하는 중 오류가 발생했습니다.');
             } finally {
-                // 로딩 인디케이터 숨기기
                 loadingIndicator.style.display = 'none';
             }
         } else {
-            alert('모든 필드를 입력해주세요.');
+            alert('제품명을 입력해주세요.');
         }
     }
 
@@ -104,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         assistantContainer.appendChild(profileImage);
         assistantContainer.appendChild(messageContent);
 
+        resultContent.innerHTML = '';
         resultContent.appendChild(assistantContainer);
 
         resultContainer.style.display = 'flex';

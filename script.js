@@ -1,59 +1,43 @@
 let elements = null;
-
-document.addEventListener('DOMContentLoaded', function() {
-    elements = {
-        productName: document.getElementById('product-name'),
-        generateButton: document.getElementById('generate-button'),
-        inputContainer: document.getElementById('input-container'),
-        resultContainer: document.getElementById('result-container'),
-        resultContent: document.getElementById('result-content'),
-        retryButton: document.getElementById('retry-button'),
-        copyButton: document.getElementById('copy-button'),
-        loadingIndicator: document.getElementById('loading-indicator')
-    };
-
-    for (const [key, element] of Object.entries(elements)) {
-        if (!element) {
-            console.error(`Element ${key} not found`);
-            return;
-        }
-    }
-
-    if (elements.generateButton) {
-        elements.generateButton.addEventListener('click', handleGenerateClick);
-    }
-    
-    if (elements.productName) {
-        elements.productName.addEventListener('keypress', handleKeyPress);
-    }
-    
-    if (elements.retryButton) {
-        elements.retryButton.addEventListener('click', handleRetryClick);
-    }
-    
-    if (elements.copyButton) {
-        elements.copyButton.addEventListener('click', handleCopyClick);
-    }
-});
-
 let generatedReview = '';
 
-function handleGenerateClick() {
-    generateReview().catch(console.error);
-}
+document.addEventListener('DOMContentLoaded', initializeApp);
 
-function handleKeyPress(e) {
-    if (e.key === 'Enter') {
-        generateReview().catch(console.error);
+function initializeApp() {
+    elements = {
+        productName: document.querySelector('#product-name'),
+        generateButton: document.querySelector('#generate-button'),
+        inputContainer: document.querySelector('#input-container'),
+        resultContainer: document.querySelector('#result-container'),
+        resultContent: document.querySelector('#result-content'),
+        retryButton: document.querySelector('#retry-button'),
+        copyButton: document.querySelector('#copy-button'),
+        loadingIndicator: document.querySelector('#loading-indicator')
+    };
+
+    const missingElements = Object.entries(elements)
+        .filter(([key, element]) => !element)
+        .map(([key]) => key);
+
+    if (missingElements.length > 0) {
+        console.error('Missing elements:', missingElements);
+        return;
     }
+
+    elements.generateButton.addEventListener('click', () => generateReview().catch(console.error));
+    elements.productName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            generateReview().catch(console.error);
+        }
+    });
+    elements.retryButton.addEventListener('click', handleRetryClick);
+    elements.copyButton.addEventListener('click', handleCopyClick);
 }
 
 function handleRetryClick() {
-    if (elements) {
-        elements.inputContainer.style.display = 'block';
-        elements.resultContainer.style.display = 'none';
-        elements.resultContent.innerHTML = '';
-    }
+    elements.inputContainer.style.display = 'block';
+    elements.resultContainer.style.display = 'none';
+    elements.resultContent.innerHTML = '';
 }
 
 function handleCopyClick() {
@@ -65,17 +49,12 @@ function handleCopyClick() {
 }
 
 async function generateReview() {
-    if (!elements || !elements.productName) {
-        console.error('Required elements not initialized');
-        return;
-    }
-
-    const name = elements.productName.value.trim();
-    if (!name) {
+    if (!elements?.productName?.value) {
         alert('제품명을 입력해주세요.');
         return;
     }
 
+    const name = elements.productName.value.trim();
     elements.loadingIndicator.style.display = 'block';
 
     try {
@@ -106,8 +85,8 @@ async function generateReview() {
 }
 
 function displayReview(reviewText) {
-    if (!elements || !elements.resultContent) {
-        console.error('Required elements not initialized');
+    if (!elements?.resultContent) {
+        console.error('Result content element not found');
         return;
     }
 

@@ -10,30 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let generatedReview = '';
 
-    generateButton.addEventListener('click', generateReview);
-
-    productName.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            generateReview();
-        }
-    });
-
-    retryButton.addEventListener('click', () => {
-        resultContainer.style.display = 'none';
-        resultContent.innerHTML = '';
-        generatedReview = '';
-        inputContainer.style.display = 'flex';
-    });
-
-    copyButton.addEventListener('click', () => {
-        if (generatedReview) {
-            navigator.clipboard.writeText(generatedReview)
-                .then(() => alert('복사되었습니다!'))
-                .catch(err => console.error('복사 실패:', err));
-        }
-    });
-
-    async function generateReview() {
+    const generateReview = async () => {
         const name = productName.value.trim();
 
         if (name) {
@@ -68,7 +45,30 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             alert('제품명을 입력해주세요.');
         }
-    }
+    };
+
+    generateButton.addEventListener('click', generateReview);
+
+    productName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            generateReview();
+        }
+    });
+
+    retryButton.addEventListener('click', () => {
+        resultContainer.style.display = 'none';
+        resultContent.innerHTML = '';
+        generatedReview = '';
+        inputContainer.style.display = 'flex';
+    });
+
+    copyButton.addEventListener('click', () => {
+        if (generatedReview) {
+            navigator.clipboard.writeText(generatedReview)
+                .then(() => alert('복사되었습니다!'))
+                .catch(err => console.error('복사 실패:', err));
+        }
+    });
 
     function displayReview(reviewText) {
         const formattedContent = marked.parse(reviewText);

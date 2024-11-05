@@ -213,7 +213,17 @@ h1 {
             </div>
         </div>
     </div>
-    <!-- 스크립트 파일 -->
+    
+    <!-- 그 다음 메인 스크립트 로드 -->
     <script src="script.js"></script>
+    
+    <!-- Google Analytics는 마지막에 로드 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WELK46JF7D"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-WELK46JF7D');
+    </script>
 </body>
 </html>
